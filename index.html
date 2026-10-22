@@ -1,0 +1,454 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUNE — генератор подарункових сертифікатів</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --cream: #f8f4ec;
+  --gold: #b49a68;
+  --ink: #443b32;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 24px;
+  background: #eeeae3;
+  color: #302b27;
+  font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+  font: 500 32px 'Cormorant Garamond', serif;
+  margin: 0 0 8px;
+}
+
+.intro {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #71695f;
+  margin-bottom: 24px;
+}
+
+.app {
+  max-width: 1050px;
+  margin: auto;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(230px, 320px) 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.panel {
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+}
+
+.panel h2 {
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0 0 20px;
+}
+
+.field { margin-bottom: 16px; }
+
+label {
+  display: block;
+  font-size: 11px;
+  margin-bottom: 7px;
+  color: #71695f;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ded8ce;
+  border-radius: 6px;
+  font: 12px 'Montserrat', sans-serif;
+  background: #fff;
+  color: #302b27;
+}
+
+button {
+  width: 100%;
+  border: 0;
+  padding: 14px;
+  border-radius: 6px;
+  font: 600 11px 'Montserrat', sans-serif;
+  cursor: pointer;
+  letter-spacing: .5px;
+}
+
+.save {
+  background: #443b32;
+  color: white;
+  margin-top: 4px;
+}
+
+.note {
+  font-size: 10px;
+  line-height: 1.7;
+  color: #82796d;
+  margin-top: 14px;
+}
+
+.preview {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 24px;
+}
+
+/* Сам сертифікат */
+.certificate {
+  position: relative;
+  overflow: hidden;
+  width: 360px;
+  height: 540px;
+  max-width: 100%;
+  background: var(--cream);
+  color: var(--ink);
+  border: 1px solid var(--gold);
+  outline: 1px solid var(--gold);
+  outline-offset: -7px;
+  text-align: center;
+  padding: 48px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.certificate::before,
+.certificate::after {
+  content: "✧";
+  position: absolute;
+  color: var(--gold);
+  font: 44px 'Cormorant Garamond', serif;
+  opacity: .8;
+}
+
+.certificate::before {
+  top: 14px;
+  left: 17px;
+}
+
+.certificate::after {
+  bottom: 12px;
+  right: 18px;
+  transform: rotate(25deg);
+}
+
+.ribbon {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: -39px;
+  right: -39px;
+  border: 1px solid var(--gold);
+  transform: rotate(45deg);
+  opacity: .7;
+}
+
+.branch {
+  position: absolute;
+  left: 10px;
+  bottom: 20px;
+  width: 92px;
+  height: 145px;
+  opacity: .52;
+}
+
+.brand {
+  font: 400 52px/.9 'Cormorant Garamond', serif;
+  letter-spacing: 5px;
+  margin-top: 7px;
+}
+
+.brand-sub {
+  font: 500 10px 'Montserrat', sans-serif;
+  letter-spacing: 5px;
+  margin-top: 9px;
+}
+
+.gold-line {
+  width: 46px;
+  height: 1px;
+  background: var(--gold);
+  margin: 28px 0 24px;
+}
+
+.heading {
+  font: 500 26px/1.15 'Cormorant Garamond', serif;
+  letter-spacing: .7px;
+  max-width: 270px;
+}
+
+.small-label {
+  font: 400 10px 'Montserrat', sans-serif;
+  letter-spacing: 2px;
+  margin-top: 28px;
+}
+
+.amount {
+  font: 500 43px/1.1 'Cormorant Garamond', serif;
+  margin-top: 7px;
+  white-space: nowrap;
+}
+
+.currency {
+  font: 500 13px 'Montserrat', sans-serif;
+  letter-spacing: 2px;
+}
+
+.wish {
+  max-width: 235px;
+  font: 400 10px/1.9 'Montserrat', sans-serif;
+  margin-top: 23px;
+}
+
+.shop-link {
+  margin-top: 23px;
+  color: var(--ink);
+  font: 600 9px 'Montserrat', sans-serif;
+  letter-spacing: 1.1px;
+  text-decoration: none;
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 5px;
+}
+
+.details {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font: 400 8px 'Montserrat', sans-serif;
+  letter-spacing: .3px;
+  position: relative;
+  z-index: 1;
+}
+
+.details span { white-space: nowrap; }
+
+@media (max-width: 680px) {
+  body { padding: 16px 12px; }
+  .workspace { grid-template-columns: 1fr; }
+  .preview { padding-top: 0; }
+  .certificate {
+    width: min(360px, 100%);
+    height: auto;
+    min-height: 540px;
+  }
+}
+
+@page {
+  size: 100mm 150mm;
+  margin: 0;
+}
+
+@media print {
+  body {
+    padding: 0;
+    margin: 0;
+    background: white;
+  }
+
+  .app, .workspace {
+    display: block;
+    width: 100%;
+    max-width: none;
+  }
+
+  .panel, .intro, h1 {
+    display: none !important;
+  }
+
+  .preview {
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
+
+  .certificate {
+    width: 100mm;
+    height: 150mm;
+    max-width: none;
+    border: 1px solid var(--gold);
+    outline: 1px solid var(--gold);
+    outline-offset: -7px;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .shop-link {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <h1>LUNE — Gift Certificate</h1>
+  <p class="intro">
+    Зміни дані сертифіката та натисни «Зберегти PDF».
+  </p>
+
+  <div class="workspace">
+    <section class="panel">
+      <h2>Дані сертифіката</h2>
+
+      <div class="field">
+        <label for="amountInput">Сума, грн</label>
+        <input id="amountInput" type="number" min="1" value="2000">
+      </div>
+
+      <div class="field">
+        <label for="numberInput">Номер сертифіката</label>
+        <input id="numberInput" value="0001" maxlength="20">
+      </div>
+
+      <div class="field">
+        <label for="expiryInput">Дійсний до</label>
+        <input id="expiryInput" type="date" value="2026-12-31">
+      </div>
+
+      <div class="field">
+        <label for="urlInput">Посилання на магазин</label>
+        <input id="urlInput" type="url"
+          value="https://www.instagram.com/"
+          placeholder="https://...">
+      </div>
+
+      <button class="save" id="saveButton">
+        ЗБЕРЕГТИ PDF
+      </button>
+
+      <p class="note">
+        PDF зберігається через вікно друку браузера.
+        Для найкращого результату вимкни колонтитули
+        та увімкни друк фону, якщо ці параметри доступні.
+      </p>
+    </section>
+
+    <section class="preview">
+      <article class="certificate" id="certificate">
+        <div class="ribbon"></div>
+
+        <div class="brand">LUNE</div>
+        <div class="brand-sub">JEWELRY</div>
+
+        <div class="gold-line"></div>
+
+        <div class="heading">ПОДАРУНКОВИЙ<br>СЕРТИФІКАТ</div>
+
+        <div class="small-label">на суму</div>
+        <div class="amount">
+          <span id="amountText">2 000</span>
+          <span class="currency">ГРН</span>
+        </div>
+
+        <div class="wish">
+          Нехай ця прикраса стане початком твоєї історії
+        </div>
+
+        <a class="shop-link" id="shopLink"
+          href="https://www.instagram.com/"
+          target="_blank" rel="noopener">
+          ПЕРЕЙТИ ДО МАГАЗИНУ
+        </a>
+
+        <div class="details">
+          <span>№ <span id="numberText">0001</span></span>
+          <span>Дійсний до <span id="expiryText">31.12.2026</span></span>
+        </div>
+
+        <svg class="branch" viewBox="0 0 100 160"
+          xmlns="http://www.w3.org/2000/svg" fill="none"
+          stroke="#b49a68" stroke-width="1">
+          <path d="M15 155 Q42 100 68 15"/>
+          <path d="M29 125 Q8 111 12 91 Q31 99 29 125Z"/>
+          <path d="M39 105 Q65 96 68 74 Q46 81 39 105Z"/>
+          <path d="M49 79 Q27 68 31 48 Q50 58 49 79Z"/>
+          <path d="M59 50 Q80 43 80 24 Q62 31 59 50Z"/>
+          <path d="M22 140 Q49 139 55 119 Q33 119 22 140Z"/>
+          <path d="M14 155 L5 160"/>
+        </svg>
+      </article>
+    </section>
+  </div>
+</div>
+
+<script>
+const amountInput = document.getElementById('amountInput');
+const numberInput = document.getElementById('numberInput');
+const expiryInput = document.getElementById('expiryInput');
+const urlInput = document.getElementById('urlInput');
+
+function updateCertificate() {
+  const amount = Math.max(0, Number(amountInput.value) || 0);
+
+  document.getElementById('amountText').textContent =
+    amount.toLocaleString('uk-UA', { maximumFractionDigits: 0 });
+
+  document.getElementById('numberText').textContent =
+    numberInput.value.trim() || '0001';
+
+  if (expiryInput.value) {
+    const parts = expiryInput.value.split('-');
+    document.getElementById('expiryText').textContent =
+      `${parts[2]}.${parts[1]}.${parts[0]}`;
+  } else {
+    document.getElementById('expiryText').textContent = '—';
+  }
+
+  const link = document.getElementById('shopLink');
+  const enteredUrl = urlInput.value.trim();
+
+  try {
+    const parsed = new URL(enteredUrl);
+    if (parsed.protocol === 'https:' || parsed.protocol === 'http:') {
+      link.href = parsed.href;
+      link.style.pointerEvents = 'auto';
+      link.style.opacity = '1';
+    } else {
+      link.removeAttribute('href');
+      link.style.pointerEvents = 'none';
+      link.style.opacity = '.5';
+    }
+  } catch {
+    link.removeAttribute('href');
+    link.style.pointerEvents = 'none';
+    link.style.opacity = '.5';
+  }
+}
+
+[amountInput, numberInput, expiryInput, urlInput].forEach(input => {
+  input.addEventListener('input', updateCertificate);
+  input.addEventListener('change', updateCertificate);
+});
+
+document.getElementById('saveButton').addEventListener('click', () => {
+  updateCertificate();
+  window.print();
+});
+
+updateCertificate();
+</script>
+</body>
+</html>
+
